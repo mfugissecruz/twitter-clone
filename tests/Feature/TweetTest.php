@@ -45,5 +45,13 @@ test('the tweet body is required', function(){
         ->call('tweet')
         ->assertHasErrors(['body' => 'required']);
 });
-todo('the tweet should be have a max length of 140 characters');
+
+test('the tweet should have a max length of 140 characters', function() {
+    actingAs(User::factory()->create());
+
+    livewire(Create::class)
+        ->set('body', str_repeat('a', 141))
+        ->call('tweet')
+        ->assertHasErrors(['body' => 'max']);
+});
 todo('should show tweet on timeline');
