@@ -13,11 +13,15 @@ class Create extends Component
     use AuthorizesRequests;
 
 
-    public string $body;
+    public ?string $body = null;
 
     public function tweet(): void
     {
         $this->authorize('create', Tweet::class);
+
+        $this->validate([
+            'body' => 'required',
+        ]);
 
         Tweet::query()->create([
             'body' => $this->body,
