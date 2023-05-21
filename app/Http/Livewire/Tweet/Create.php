@@ -28,7 +28,9 @@ class Create extends Component
             'created_by' => Auth::id(),
         ]);
 
-        $this->emit('tweet:created');
+        $this->reset('body');
+
+        $this->emit('tweet::created');
     }
 
     public function render(): View

@@ -15,7 +15,7 @@ it('should be able to create a tweet', function() {
     livewire(Create::class)
         ->set('body', 'This is my first tweet')
         ->call('tweet')
-        ->assertEmitted('tweet:created');
+        ->assertEmitted('tweet::created');
 
     assertDatabaseCount('tweets', 1);
 
@@ -35,7 +35,7 @@ it('should be sure that only authenticated users can tweet', function() {
     livewire(Create::class)
         ->set('body', 'This is my first tweet')
         ->call('tweet')
-        ->assertEmitted('tweet:created');
+        ->assertEmitted('tweet::created');
 });
 
 test('the tweet body is required', function(){
@@ -64,8 +64,18 @@ it('should show tweet on timeline', function() {
     livewire(Create::class)
         ->set('body', 'This is my first tweet')
         ->call( 'tweet')
-        ->assertEmitted('tweet:created');
+        ->assertEmitted('tweet::created');
 
     livewire(Timeline::class)
         ->assertSee('This is my first tweet');
+});
+
+it('should set body as null after tweeting', function () {
+    actingAs(User::factory()->create());
+
+    livewire(Create::class)
+        ->set('body', 'This is my first tweet')
+        ->call('tweet')
+        ->assertEmitted('tweet::created')
+        ->assertSet('body', null);
 });
